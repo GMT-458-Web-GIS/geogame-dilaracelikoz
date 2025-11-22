@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lost Relic Hunt GeoGame</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIINfBIH/9x5wAecIDiwBdaQikK02/xm8vA="
+          crossorigin=""/>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+    <div id="map-area"></div>
+    
+    <div id="side-panel">
+        <h2>LOST RELIC HUNT</h2>
+        <p>SCORE: <span id="score">0</span></p>
+        <p>TIME: <span id="timer">120</span></p>
+        
+        <div id="hint-box">
+            <h4>HINT:</h4>
+            <p id="clue-text">Click Start to begin!</p>
+        </div>
+        
+        <button id="start-button">START</button>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20n6cT8x9G2eCgoTjJ/v+c9oI5y7xfrp2cABL+BODGY="
+            crossorigin=""></script>
+    <script src="script.js"></script>
+</body>
+</html>

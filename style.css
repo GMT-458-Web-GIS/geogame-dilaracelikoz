@@ -1,0 +1,43 @@
+body {
+    display: flex; 
+    margin: 0;
+    font-family: Arial, sans-serif;
+    overflow: hidden; 
+    color: #7D1C4A;
+}
+
+#map-area {
+    width: 80%;
+    height: 100vh; 
+}
+
+#side-panel {
+    width: 20%;
+    padding: 20px;
+    background-color: #FFEDFA;
+    height: 100vh;
+    box-sizing: border-box; 
+    text-align: center;
+    border-left: 2px solid #EC7FA9; 
+}
+
+h2 {
+    color: #FF90BB; 
+}
+
+#start-button {
+    padding: 10px 20px;
+    font-size: 1.2em;
+    background-color: #FF90BB;
+    color: #FFEDFA;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+#hint-box {
+    margin: 30px 0;
+    padding: 10px;
+    border: 1px solid #EC7FA9;
+    background-color: #FFEDFA;
+}
