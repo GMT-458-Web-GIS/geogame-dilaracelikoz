@@ -25,19 +25,53 @@ h2 {
     color: #FF90BB; 
 }
 
-#start-button {
-    padding: 10px 20px;
-    font-size: 1.2em;
-    background-color: #FF90BB;
+
+#control-button, #restart-button { 
+    padding: 9px 22px; 
+    font-size: 1em;
+    font-weight: bold;
+    background-color: #FF90BB; 
     color: #FFEDFA;
-    border: none;
+    border: 2px solid #EC7FA9; 
+    border-radius: 8px; 
     cursor: pointer;
-    margin-top: 20px;
+    margin-top: 15px;
+
+    box-shadow: 
+        0 4px 6px rgba(255, 136, 170, 0.3), 
+        0 1px 3px rgba(255, 136, 170, 0.1);
+
+    transition: all 0.2s ease; 
 }
+
+
+#control-button:hover, #restart-button:hover {
+    background-color: #FF90BB; 
+    box-shadow: 
+        0 6px 10px rgba(255, 136, 170, 0.3), 
+        0 2px 4px rgba(255, 136, 170, 0.1);
+    transform: translateY(-2px); 
+}
+
+
+#control-button:active, #restart-button:active {
+    background-color: #FF90BB; 
+    box-shadow: 0 2px 3px rgba(255, 136, 170, 0.3);
+    transform: translateY(1px); 
+}
+
 
 #hint-box {
     margin: 30px 0;
-    padding: 10px;
-    border: 1px solid #EC7FA9;
+    padding: 15px; 
+    
+  
+    border: 3px solid #EC7FA9; 
+    border-radius: 10px; 
     background-color: #FFEDFA;
+    
+
+    box-shadow: 
+        0 8px 15px rgba(255, 136, 170, 0.3), 
+        0 4px 6px rgba(255, 136, 170, 0.1);  
 }
