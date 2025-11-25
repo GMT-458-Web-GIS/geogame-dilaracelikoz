@@ -18,27 +18,42 @@
     <div id="map-area"></div>
     
 <div id="side-panel">
-    <h2>LOST RELIC HUNT</h2>
-    <div style="margin-bottom: 15px;">
-        <label for="city-select" style="font-weight: bold;">Select Location:</label>
-        <select id="city-select" onchange="resetGame()">
+    
+    <div id="splash-screen">
+        <h2>LOST RELIC HUNT</h2>
+        <div id="splash-info" 
+            <p style="font-weight: bold; margin-top: 0;">Welcome, Explorer!</p>
+            <p style="font-size: 0.9em;">Your goal is to find hidden landmarks using clues and limited time (120 seconds). Choose your location to begin your search.</p>
+        </div>
+        
+        <select id="city-select" style="display: none;">
             <option value="ankara">Ankara</option>
             <option value="istanbul">Istanbul</option>
         </select>
+        
+        <div id="city-buttons" style="margin-top: 25px; display: flex; justify-content: space-around;">
+            <button class="city-select-button" onclick="selectCity('ankara')">ANKARA (Easy)</button>
+            <button class="city-select-button" onclick="selectCity('istanbul')">ISTANBUL (Hard)</button>
+        </div>
     </div>
     
-    <p>SCORE: <span id="score">0</span></p>
-    <p>TIME: <span id="timer">120</span></p>
+    <div id="game-controls" style="display: none;">
+        <h2>LOST RELIC HUNT</h2>
+        <p>SCORE: <span id="score">0</span></p>
+        <p>TIME: <span id="timer">120</span></p>
 
-    <div id="hint-box">
-        <h4>HINT:</h4>
-        <p id="clue-text">Click Start to begin!</p>
+        <div id="hint-box">
+            <h4>HINT:</h4>
+            <p id="clue-text">Click START to begin!</p>
+        </div>
+        
+        <div id="button-container" style="display: flex; justify-content: center; margin-top: 20px;">
+            <button id="control-button" onclick="toggleGame()">START</button> 
+            <button id="restart-button" onclick="restartGame()" style="display: none; margin-left: 10px;">START AGAIN</button>
+        </div>
     </div>
-<div id="button-container" style="display: flex; justify-content: center; margin-top: 20px;">
-        <button id="control-button" onclick="toggleGame()">START</button> 
-        <button id="restart-button" onclick="restartGame()" style="display: none; margin-left: 10px;">START AGAIN</button>
-    </div>
-</div>
+    <button id="home-button" onclick="goHome()">GO HOME</button>
+</div> 
 </div>
 
 

@@ -75,3 +75,57 @@ h2 {
         0 8px 15px rgba(255, 136, 170, 0.3), 
         0 4px 6px rgba(255, 136, 170, 0.1);  
 }
+
+
+.city-select-button {
+  
+    padding: 12px 10px; 
+    font-size: 1.1em;
+    font-weight: bold;
+    background-color: #FF90BB; 
+    color: #FFEDFA;
+    border: 2px solid #EC7FA9;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 5px;
+    box-shadow: 0 2px 4px rgba(255, 136, 170, 0.3); 
+    transition: background-color 0.2s;
+    width: 45%; 
+}
+
+.city-select-button:hover {
+    background-color: #FF90BB;
+    box-shadow: 0 4px 6px rgba(255, 136, 170, 0.3);
+}
+
+#home-button {
+    position: absolute; 
+    bottom: 20px;      
+    right: 20px;        
+    padding: 8px 12px;
+    font-size: 0.9em;
+    background-color: #FF90BB; 
+    color: #FFEDFA; 
+    border: 1px solid #EC7FA9;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 1000; 
+    box-shadow: 0 2px 4px rgba(255, 136, 170, 0.3);
+    display: none; 
+}
+
+
+#splash-info {
+    margin: 30px 0;
+    padding: 15px; 
+    
+  
+    border: 3px solid #EC7FA9; 
+    border-radius: 10px; 
+    background-color: #FFEDFA;
+    
+
+    box-shadow: 
+        0 8px 15px rgba(255, 136, 170, 0.3), 
+        0 4px 6px rgba(255, 136, 170, 0.1);  
+}
