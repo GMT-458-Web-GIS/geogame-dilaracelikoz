@@ -129,3 +129,65 @@ h2 {
         0 8px 15px rgba(255, 136, 170, 0.3), 
         0 4px 6px rgba(255, 136, 170, 0.1);  
 }
+
+
+#north-arrow {
+    position: absolute;
+    top: 20px;       
+    right: 20px;     
+    z-index: 1000;   
+    
+    width: 55px;
+    height: 55px;
+    background-color: #FFEDFA; 
+    border: 2px solid #FF90BB; 
+    border-radius: 50%; 
+    box-shadow: 0 4px 8px rgba(255, 136, 170, 0.3);
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+
+.arrow-n {
+    font-family: 'Arial', sans-serif;
+    font-weight: 500;
+    color: #FF90BB; 
+    font-size: 14px;
+    line-height: 1;
+    margin-bottom: 3px; 
+}
+
+
+.arrow-shape {
+    width: 2px;       
+    height: 12px;     
+    background-color: #FF90BB; 
+    border-radius: 1px; 
+    position: relative;
+    margin-top: 5px;  
+}
+
+
+.arrow-shape::after {
+    content: '';
+    position: absolute;
+    top: -10px; 
+    left: 50%;
+    transform: translateX(-50%);
+    
+    width: 0; 
+    height: 0; 
+    
+    border-left: 5px solid transparent;  
+    border-right: 5px solid transparent; 
+    border-bottom: 11px solid #FF90BB;   
+}
+
+
+.huechange { 
+    filter: hue-rotate(130deg) brightness(1.1) saturate(1.2); 
+}
