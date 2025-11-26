@@ -1,6 +1,6 @@
 
 const pinkIcon = L.icon({
-    iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png', 
+    iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
     shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
     iconSize: [25, 41],
     iconAnchor: [12, 41],
@@ -8,36 +8,16 @@ const pinkIcon = L.icon({
     className: 'huechange' 
 });
 
-
-function getDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371e3; 
-    const φ1 = lat1 * Math.PI / 180;
-    const φ2 = lat2 * Math.PI / 180;
-    const Δφ = (lat2 - lat1) * Math.PI / 180;
-    const Δλ = (lon2 - lon1) * Math.PI / 180;
-
-    const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-              Math.cos(φ1) * Math.cos(φ2) *
-              Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-    return Math.round(R * c);
-}
-
 function getDirectionText(userLat, userLng, targetLat, targetLng, distance) {
     let direction = "";
-    if (targetLng > userLng) direction += "East";
-    else direction += "West";
-    
-    if (targetLat > userLat) direction = "North " + direction;
-    else direction = "South " + direction;
-
-    if (distance < 50) return "You are extremely close! Go Closer!";
-    return `Go ${direction}, approx. ${distance} meters 🧭`;
+    if (targetLng > userLng) direction += "East"; else direction += "West";
+    if (targetLat > userLat) direction = "North " + direction; else direction = "South " + direction;
+    if (distance < 50) return "Extremely close!";
+    return `Go ${direction}, approx. ${distance}m 🧭`;
 }
 
-
 let score = 0;
+let maxPossibleScore = 0;
 let time = 120;
 let gameActive = false;
 let timerInterval;
@@ -47,7 +27,6 @@ let currentArtifacts = [];
 let myChart = null; 
 let responseTimes = []; 
 let lastTimeRemaining = 120; 
-
 
 const scoreDisplay = document.getElementById('score');
 const timerDisplay = document.getElementById('timer');
@@ -59,39 +38,42 @@ const splashScreen = document.getElementById('splash-screen');
 const gameControls = document.getElementById('game-controls'); 
 const homeButton = document.getElementById('home-button');
 const resultModal = document.getElementById('result-modal'); 
-
+const mouseCoords = document.getElementById('mouse-coords');
 
 const cityData = {
     ankara: {
         center: [39.9334, 32.8597],
         zoom: 14, 
         distanceThreshold: 300, 
+        timeLimit: 120, 
         artifacts: [
-            { name: "Ankara Kalesi", clue: "Ankara'nın tam ortasındaki tarihi zirve noktası.", lat: 39.9405, lng: 32.8631 },
-            { name: "Anıtkabir", clue: "Türk ulusunun en önemli anıt mezarı.", lat: 39.9250, lng: 32.8369 },
-            { name: "Atakule", clue: "Çankaya'nın sembolü olan kule.", lat: 39.8973, lng: 32.8681 },
-            { name: "Kuğulu Park", clue: "Çankaya'daki meşhur göletli park.", lat: 39.9022, lng: 32.8601 },
-            { name: "Hacettepe Beytepe", clue: "Şehrin batısındaki en büyük üniversite kampüsü.", lat: 39.8660, lng: 32.7480 },
+            { name: "Ankara Castle", clue: "The historical hilltop fortress in the center of old Ankara.", lat: 39.9405, lng: 32.8631 },
+            { name: "Anitkabir", clue: "The monumental mausoleum of Mustafa Kemal Ataturk. (BONUS POINTS!)", lat: 39.9250, lng: 32.8369 },
+            { name: "Atakule", clue: "The primary landmark tower located in Cankaya.", lat: 39.8859, lng: 32.8558 },
+            { name: "Kugulu Park", clue: "A famous park with swans in the Kavaklidere district.", lat: 39.9022, lng: 32.8601 },
+            { name: "Hacettepe Beytepe", clue: "The large university campus located in the western hills.", lat: 39.8704, lng: 32.7358 },
+            { name: "Republic Museum", clue: "The 2nd Parliament Building, witnessing the early Republic years.", lat: 39.9411, lng: 32.8515 },
+            { name: "Eymir Lake", clue: "A natural lake south of the city, popular for biking.", lat: 39.8249, lng: 32.8328 },
+            { name: "Ataturk Forest Farm (AOÇ)", clue: "A large recreational farming area and zoo established by Ataturk.", lat: 39.9463, lng: 32.8047 }
         ]
     },
     istanbul: {
         center: [41.0082, 28.9784],
         zoom: 14, 
         distanceThreshold: 300, 
+        timeLimit: 90, 
         artifacts: [
-            { name: "Galata Kulesi", clue: "Altın Boynuz'un girişindeki, denizcileri selamlayan kule.", lat: 41.0255, lng: 28.9748 },
-            { name: "Yerebatan Sarnıcı", clue: "Ayasofya'nın yakınında, su altındaki gizemli yapı.", lat: 41.0083, lng: 28.9840 },
-            { name: "Dolmabahçe Sarayı", clue: "Boğaz kıyısında, Beşiktaş'taki görkemli saray.", lat: 41.0397, lng: 29.0044 },
-            { name: "Kız Kulesi", clue: "Üsküdar açıklarında, karadan uzaktaki küçük fener.", lat: 41.0210, lng: 29.0040 },
-            { name: "Beşiktaş Stadyumu", clue: "Dolmabahçe Sarayı'nın hemen yanı başındaki spor mabedi.", lat: 41.0366, lng: 29.0069 },
-            { name: "Taksim Meydanı", clue: "İstiklal Caddesi'nin bittiği, Cumhuriyet anıtının bulunduğu merkez.", lat: 41.0361, lng: 28.9850 },
-            { name: "Karaköy İskelesi", clue: "Galata Köprüsü'nün hemen altında, vapur durağı.", lat: 41.0220, lng: 28.9772 },
-            { name: "Pera", clue: "Tarihi Büyük Otellerin bulunduğu, tramvayın geçtiği Avrupai semt.", lat: 41.0310, lng: 28.9750 },
+            { name: "Galata Tower", clue: "A medieval stone tower in the Galata/Karakoy quarter.", lat: 41.0255, lng: 28.9741 },
+            { name: "Basilica Cistern", clue: "The largest of several hundred ancient cisterns beneath the city.", lat: 41.0084, lng: 28.9779 },
+            { name: "Dolmabahce Palace", clue: "The main administrative center of the Ottoman Empire on the Bosphorus.", lat: 41.0391, lng: 29.0003 },
+            { name: "Maiden's Tower", clue: "A tower on a small islet at the southern entrance of the Bosphorus.", lat: 41.0211, lng: 29.0041 },
+            { name: "Tupras Stadium", clue: "A modern football stadium right next to Dolmabahce Palace.", lat: 41.0393, lng: 28.9944 },
+            { name: "Taksim Square", clue: "The heart of modern Istanbul, known for the Republic Monument.", lat: 41.0369, lng: 28.9853 },
+            { name: "Karakoy Pier", clue: "A busy ferry terminal near the Galata Bridge.", lat: 41.0225, lng: 28.9769 },
+            { name: "Pera Museum", clue: "A private museum in the Tepebasi quarter, formerly the Bristol Hotel.", lat: 41.0317, lng: 28.9754 }
         ]
     }
 };
-
-
 
 const map = L.map('map-area'); 
 
@@ -101,6 +83,9 @@ function initializeMap() {
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
     
+    map.on('mousemove', function(e) {
+        mouseCoords.textContent = `Lat: ${e.latlng.lat.toFixed(4)}, Lng: ${e.latlng.lng.toFixed(4)}`;
+    });
 
     homeButton.style.display = 'none';
     gameControls.style.display = 'none';
@@ -117,19 +102,24 @@ function resetGame() {
     const cityDataRef = cityData[currentCity];
 
     currentArtifacts = cityDataRef.artifacts;
-    const difficultyText = cityDataRef.distanceThreshold === 300 ? "Easy" : "Hard";
+
+    maxPossibleScore = 0;
+    currentArtifacts.forEach(art => {
+        if (art.name === "Anitkabir") maxPossibleScore += 50;
+        else maxPossibleScore += 10;
+    });
 
     map.setView(cityDataRef.center, cityDataRef.zoom - 2); 
     map.invalidateSize(); 
 
-    time = 120;
-    lastTimeRemaining = 120;
+    time = cityDataRef.timeLimit; 
+    lastTimeRemaining = time;
     responseTimes = [];
     
     timerDisplay.textContent = time;
     score = 0;
     scoreDisplay.textContent = score;
-    clueText.textContent = `Location: ${currentCity.toUpperCase()} (${difficultyText}). Ready to find ${currentArtifacts.length} relics!`;
+    clueText.textContent = `Ready to explore ${currentCity.toUpperCase()}? Press START.`;
     
     gameActive = false;
     controlButton.textContent = "START";
@@ -138,30 +128,19 @@ function resetGame() {
     clearInterval(timerInterval);
     map.off('click', handleMapClick);
 
-    clearMapLayers(); 
-    restartButton.style.display = 'none'; 
-}
-
-
-function clearMapLayers() {
     map.eachLayer(function(layer) {
-
         if (layer.options.attribution !== '© OpenStreetMap contributors') {
             map.removeLayer(layer);
         }
     });
+    restartButton.style.display = 'none'; 
 }
-
-
 
 function startTimer() {
     timerInterval = setInterval(() => {
         time--;
         timerDisplay.textContent = time;
-
-        if (time <= 0) {
-            endGame();
-        }
+        if (time <= 0) endGame();
     }, 1000); 
 }
 
@@ -172,7 +151,6 @@ function updateScore(points) {
 
 function displayClue() {
     if (currentArtifactIndex < currentArtifacts.length) {
-
         clueText.textContent = currentArtifacts[currentArtifactIndex].clue;
     } else {
         endGame();
@@ -227,16 +205,11 @@ function goHome() {
         clearInterval(timerInterval);
         map.off('click', handleMapClick);
     }
-    
-
     gameControls.style.display = 'none';
     splashScreen.style.display = 'block';
     homeButton.style.display = 'none';
-    
-
     map.setView([39.9334, 32.8597], 6); 
-    clearMapLayers(); 
-    
+    clearMapLayers();
     gameActive = false;
     currentArtifactIndex = 0;
     controlButton.textContent = "START";
@@ -250,59 +223,59 @@ function selectCity(city) {
     resetGame();
 }
 
+function clearMapLayers() {
+    map.eachLayer(function(layer) {
+        if (layer.options.attribution !== '© OpenStreetMap contributors') {
+            map.removeLayer(layer);
+        }
+    });
+}
+
 function closeModal() {
     resultModal.style.display = 'none'; 
-    if (myChart) {
-        myChart.destroy(); 
-    }
+    if (myChart) myChart.destroy(); 
     goHome(); 
 }
 
 function showResultModal() {
     resultModal.style.display = 'block';
-    document.getElementById('final-score-text').textContent = `Final Score: ${score}`;
-
-    const ctx = document.getElementById('gameChart').getContext('2d');
+    document.getElementById('final-score-text').textContent = `Final Score: ${score} / ${maxPossibleScore}`;
     
-    if (myChart) {
-        myChart.destroy();
+    const msg = document.getElementById('game-over-msg');
+    if (score >= maxPossibleScore) {
+        msg.textContent = "PERFECT! You found everything!";
+        msg.style.color = "#EC7FA9";
+        triggerConfetti();
+    } else {
+        msg.textContent = "Time's up! Try again to find all relics.";
+        msg.style.color = "#EC7FA9";
     }
 
-    const labels = responseTimes.map((_, index) => `Relic ${index + 1}`);
+    const ctx = document.getElementById('gameChart').getContext('2d');
+    if (myChart) myChart.destroy();
+
+    const labels = responseTimes.map((_, index) => `Q${index + 1}`);
 
     myChart = new Chart(ctx, {
         type: 'line', 
         data: {
             labels: labels,
             datasets: [{
-                label: 'Time Spent (Seconds)', 
+                label: 'Time Spent (sec)', 
                 data: responseTimes,
                 borderColor: '#FF90BB', 
                 backgroundColor: 'rgba(255, 144, 187, 0.2)', 
                 borderWidth: 3,
                 tension: 0.4, 
                 pointBackgroundColor: '#FF90BB',
-                pointRadius: 5,
                 fill: true 
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: { display: true, text: 'Seconds' }
-                }
-            },
-            plugins: {
-                legend: { display: false },
-                title: {
-                    display: true,
-                    text: 'Speed Analysis: How fast did you find them?',
-                    font: { size: 16 }
-                }
-            }
+            scales: { y: { beginAtZero: true, title: { display: true, text: 'Seconds' } } },
+            plugins: { legend: { display: false } }
         }
     });
 }
@@ -314,39 +287,80 @@ function handleMapClick(e) {
     const userLng = e.latlng.lng;
     const target = currentArtifacts[currentArtifactIndex];
     const cityDataRef = cityData[currentCity];
+    const from = turf.point([userLng, userLat]); 
+    const to = turf.point([target.lng, target.lat]);
+    const options = {units: 'meters'}; 
+    const distance = Math.round(turf.distance(from, to, options));
 
-    const distance = getDistance(userLat, userLng, target.lat, target.lng);
     const successThreshold = cityDataRef.distanceThreshold;
 
     if (distance <= successThreshold) { 
-
         let timeSpent = lastTimeRemaining - time;
         if (timeSpent < 0) timeSpent = 0; 
         responseTimes.push(timeSpent); 
         lastTimeRemaining = time; 
 
-        updateScore(10); 
+        let pointsEarned = 10;
+        if (target.name === "Anitkabir") pointsEarned = 50;
+
+        updateScore(pointsEarned); 
         
         L.marker([target.lat, target.lng], {icon: pinkIcon})
             .addTo(map)
-            .bindPopup(`SUCCESS! Found ${target.name}!`)
+            .bindPopup(`FOUND! ${target.name} (+${pointsEarned})`)
             .openPopup();
             
         currentArtifactIndex++;
         displayClue();
     } else {
+        time -= 2; 
+        if (time < 0) time = 0;
+        timerDisplay.textContent = time;
+
         const directionHint = getDirectionText(userLat, userLng, target.lat, target.lng, distance);
-        const failedMarker = L.circle([userLat, userLng], { 
-            color: 'red', fillColor: 'red', fillOpacity: 0.5, radius: 100 
+        const failedMarker = L.circleMarker([userLat, userLng], { 
+            color: '#ff0062ff', fillColor: '#ff0062ff', fillOpacity: 0.5, radius: 13 
         }).addTo(map);
         
-        clueText.textContent = `Miss! Try again: ${directionHint}`; 
+        clueText.textContent = `Miss! (-2s) Try again: ${directionHint}`; 
         
         setTimeout(() => {
             map.removeLayer(failedMarker);
             displayClue();
-        }, 3000); 
+        }, 2500); 
     }
+}
+
+function triggerConfetti() {
+    var duration = 3 * 1000; 
+    var animationEnd = Date.now() + duration;
+    var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 99999 };
+
+    function randomInOut(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+    var interval = setInterval(function() {
+        var timeLeft = animationEnd - Date.now();
+
+        if (timeLeft <= 0) {
+            return clearInterval(interval);
+        }
+
+        var particleCount = 50 * (timeLeft / duration);
+        var colors = ['#FF90BB', '#EC7FA9', '#FFEDFA', '#FFEDFA'];
+
+        confetti(Object.assign({}, defaults, { 
+            particleCount, 
+            colors: colors,
+            origin: { x: randomInOut(0.1, 0.3), y: Math.random() - 0.2 } 
+        }));
+        confetti(Object.assign({}, defaults, { 
+            particleCount, 
+            colors: colors,
+            origin: { x: randomInOut(0.7, 0.9), y: Math.random() - 0.2 } 
+        }));
+    }, 250);
 }
 
 initializeMap();

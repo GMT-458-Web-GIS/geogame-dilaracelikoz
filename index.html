@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lost Relic Hunt GeoGame</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <title>Urban Explorer Challenge</title> <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     <link rel="stylesheet" href="style.css"> 
 </head>
 <body>
@@ -13,60 +12,67 @@
             <div class="arrow-n">N</div>
             <div class="arrow-shape"></div>
         </div>
+        <div id="mouse-coords">Lat: 0.0000, Lng: 0.0000</div>
     </div>
     
     <div id="side-panel">
         
         <div id="splash-screen">
-            <h2>LOST RELIC HUNT</h2>
+            <h2>URBAN EXPLORER</h2>
             <div id="splash-info">
                 <p style="font-weight: bold; margin-top: 0;">Welcome, Explorer!</p>
-                <p style="font-size: 0.9em;">Your goal is to find hidden landmarks using clues and limited time (120 seconds). Choose your location to begin your search.</p>
+                <p style="font-size: 0.9em;">Test your geographical knowledge! Find the landmarks based on clues before time runs out.</p>
+                <p style="font-size: 0.85em; color: #FF90BB; font-weight: bold; margin-top: 10px;">💡 TIP: Zoom in for better accuracy!</p>
             </div>
+            
             <select id="city-select" style="display: none;">
                 <option value="ankara">Ankara</option>
                 <option value="istanbul">Istanbul</option>
             </select>
+            
             <div id="city-buttons" style="margin-top: 25px; display: flex; justify-content: space-around;">
-                <button class="city-select-button" onclick="selectCity('ankara')">ANKARA (Easy)</button>
-                <button class="city-select-button" onclick="selectCity('istanbul')">ISTANBUL (Hard)</button>
+                <button class="city-select-button" onclick="selectCity('ankara')">ANKARA<br><span style="font-size:0.8em">(Easy - 120s)</span></button>
+                <button class="city-select-button" onclick="selectCity('istanbul')">ISTANBUL<br><span style="font-size:0.8em">(Hard - 90s)</span></button>
             </div>
         </div>
         
         <div id="game-controls" style="display: none;">
-            <h2>LOST RELIC HUNT</h2>
+            <h2>URBAN EXPLORER</h2>
             <p>SCORE: <span id="score">0</span></p>
             <p>TIME: <span id="timer">120</span></p>
 
             <div id="hint-box">
-                <h4>HINT:</h4>
+                <h4>TARGET CLUE:</h4>
                 <p id="clue-text">Click START to begin!</p>
             </div>
 
-
-            
             <div id="button-container" style="display: flex; justify-content: center; margin-top: 20px;">
                 <button id="control-button" onclick="toggleGame()">START</button> 
-                <button id="restart-button" onclick="restartGame()" style="display: none; margin-left: 10px;">START AGAIN</button>
+                <button id="restart-button" onclick="restartGame()" style="display: none; margin-left: 10px;">RESTART</button>
             </div>
         </div>
 
-        <button id="home-button" onclick="goHome()">GO HOME</button>
+        <button id="home-button" onclick="goHome()">MAIN MENU</button>
     </div>
 
-    <div id="result-modal" style="display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6);">
-        <div style="background-color: white; margin: 5% auto; padding: 20px; border: 4px solid #FF90BB; border-radius: 15px; width: 60%; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
-            <h2 style="color: #FF90BB; font-size: 2em; margin-bottom: 10px;">GAME OVER!</h2>
+    <div id="result-modal" style="display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(255, 136, 170, 0.3);">
+        <div style="background-color: #FFEDFA; margin: 5% auto; padding: 20px; border: 4px solid #FF90BB; border-radius: 15px; width: 60%; text-align: center; box-shadow: 0 10px 25px rgba(255, 136, 170, 0.3);">
+            <h2 id="game-over-title" style="color: #FF90BB; font-size: 2em; margin-bottom: 10px;">GAME OVER!</h2>
             <p id="final-score-text" style="font-size: 1.5em; font-weight: bold; color: #7D1C4A;">Your Score: 0</p>
+            <p id="game-over-msg" style="color: #7D1C4A;">...</p>
             
             <div style="height: 300px; width: 100%; margin-bottom: 20px;">
                 <canvas id="gameChart"></canvas>
             </div>
             
-            <button onclick="closeModal()" style="padding: 12px 30px; background-color: #FF90BB; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1.2em; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">CLOSE & GO HOME</button>
+            <button onclick="closeModal()" style="padding: 12px 30px; background-color: #FF90BB; color: #FFEDFA; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1.2em; box-shadow: 0 4px 6px rgba(255, 136, 170, 0.1);">CLOSE & MENU</button>
         </div>
     </div>
+
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script> <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script src="script.js"></script>
 </body>
 </html>
