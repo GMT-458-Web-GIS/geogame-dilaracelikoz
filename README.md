@@ -1,8 +1,8 @@
-# 🌸 HERITAGE HUNT: Urban Explorer Challenge 🏛️
+# 🌸 HERITAGE HUNT
 
 **Heritage Hunt** is an interactive web-based GeoGame developed for the **GMT 458 - Web GIS** course. The game challenges players to find historical landmarks and cultural heritage sites in major Turkish cities (Ankara and Istanbul) based on textual clues within a limited time.
 
-**[PLAY THE GAME HERE]()** 
+**[PLAY THE GAME HERE](https://gmt-458-web-gis.github.io/geogame-dilaracelikoz/)** 
 
 ---
 
