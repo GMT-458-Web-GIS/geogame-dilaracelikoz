@@ -1,40 +1,53 @@
-# GMT 458 - GeoGame Project: "Lost Relic Hunt"
+# 🌸 HERITAGE HUNT: Urban Explorer Challenge 🏛️
 
-This document outlines the design for the Assignment 2: GeoGame project.
+**Heritage Hunt** is an interactive web-based GeoGame developed for the **GMT 458 - Web GIS** course. The game challenges players to find historical landmarks and cultural heritage sites in major Turkish cities (Ankara and Istanbul) based on textual clues within a limited time.
 
-## 1. Requirements
+**[PLAY THE GAME HERE]()** 
 
-The game's core requirements are as follows:
-* An interactive map will be displayed to the user (using Leaflet.js).
-* The user will have a "Score" tracker.
-* A "Time Remaining" counter will be present, starting from 120 seconds.
-* A "Clue" text area will display hints describing the location of a hidden relic.
-* The objective is to find as many relics as possible by clicking on the map before the time runs out.
+---
 
-## 2. Interface Layout
+##  Features
 
-**![WhatsApp Image 2025-11-16 at 23 45 15](https://github.com/user-attachments/assets/34c28272-486c-4e25-a2c0-c77b3268f1ed)** 
+* **Multi-City Gameplay:** Choose between **Ankara** (Easy Mode) and **Istanbul** (Hard Mode).
+* **Dynamic Difficulty:**
+    * **Easy:** Simpler clues, longer time (105s).
+    * **Hard:** Complex clues, shorter time (85s).
+* **Smart Feedback System:**
+    * The game calculates the real-world distance between the user's click and the target.
+    * Provides directional hints which user can follow by the coordinates placed below the map (e.g., "Go North West, approx 300m").
+* **Penalty System:** Wrong guesses deduct time (-2 seconds) to increase the challenge.
 
-### Layout Description:
-* **Main Area (Left 80%):** This area will contain the full interactive Leaflet map.
-* **Side Panel (Right 20%):** This panel will display all game-related information:
-    * Game Title: "Lost Relic Hunt"
-    * Score: 0
-    * Time Remaining: 120
-    * Clue: [Current clue text will appear here...]
-    * "Start Game" Button
+---
 
-**Design Note:** This is a preliminary design document. Minor differences in interface and functionality may exist between this design and the final implemented application.
+##  Technical Stack & Bonus Libraries
 
-## 3. Game Mechanics and Design
+This project was built using **HTML, CSS, and Vanilla JavaScript, and Leaflet.js**. In addition to the core requirements, the following advanced packages were integrated for **Bonus Points**:
 
-### Progression and Scoring 
-The game is time-based. The user will have a total of 120 seconds. The primary goal is to "complete as many tasks as possible" within this time limit. For every correctly identified relic, the user earns points, and a new clue is immediately provided. The game ends when the timer reaches zero.
+### Chart.js 
+* **Usage:** At the end of the game, a dynamic line chart is generated inside a modal window.
+* **Purpose:** To visualize the player's performance (Time Spent vs. Question Number), allowing users to analyze their speed for each specific landmark.
 
-### Objectives & Lives 
-Instead of "questions," the game provides a continuous stream of "clues" or "targets." There is no limit to the number of clues; the goal is to maximize the score within the time limit. The game does not feature a "lives" system. Clicking an incorrect location will only result in lost time, not a point penalty.
+---
 
-### Proposed Technology Stack 
-* **Base Map:** Leaflet.js
-* **Interface (Timer, Score, Clues):** Vanilla JavaScript
-* **(Bonus Goal):** An advanced visualization library like D3.js could be explored to add custom icons for found locations.
+##  Design & UI
+
+The project features custom **"Pink"** theme:
+* **Custom Markers:** Standard blue Leaflet markers were filtered to match the pink color palette.
+* **3D Effects:** Buttons and info boxes feature CSS-based 3D hover effects and shadows.
+* **Responsive Layout:** A clean sidebar for game controls and a full-screen map area.
+
+---
+
+##  How to Play
+
+1.  **Select a City:** Choose Ankara or Istanbul from the splash screen.
+2.  **Read the Clue:** Look at the "Target Clue" box to identify the landmark.
+3.  **Find & Click:** Navigate the map and click where you think the landmark is located.
+    * ✅ **Correct:** You earn points and move to the next clue.
+    * ❌ **Incorrect:** You lose 2 seconds and receive a directional hint.
+4.  **Review:** When the game ends, check your performance graph in the result window that shows the time that you spend to find the locations.
+
+---
+
+##  Author
+**Dilara Çeliköz** 
