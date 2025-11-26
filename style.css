@@ -1,4 +1,3 @@
-
 body { 
     display: flex; 
     margin: 0; 
@@ -26,8 +25,40 @@ body {
     position: relative; 
 }
 
-h2, h4 {
+h2 {
     color: #FF90BB; 
+    text-transform: uppercase; 
+    font-size: 2em; 
+    letter-spacing: 1px;       
+    margin-top: 0;
+    margin-bottom: 20px;
+    background-color: #FFEDFA; 
+    border: 3px solid #EC7FA9; 
+    border-radius: 15px;       
+    padding: 15px 10px;        
+    box-shadow: 
+        0 8px 15px rgba(255, 136, 170, 0.3), 
+        0 4px 6px rgba(255, 136, 170, 0.1);
+        
+    text-shadow: 
+        1px 1px 0 #EC7FA9,   
+        3px 3px 2px rgba(255, 136, 170, 0.3); 
+
+    transition: all 0.3s ease; 
+    cursor: default;
+}
+
+h2:hover {
+    transform: translateY(-3px) scale(1.02); 
+    box-shadow: 
+        0 12px 20px rgba(255, 136, 170, 0.4), 
+        0 6px 10px rgba(255, 136, 170, 0.1);
+    border-color: #EC7FA9; 
+    background-color: #FFEDFA;
+}
+
+h4 {
+    color: #FF90BB;
     margin-top: 0;
     text-shadow: 1px 1px 0 #FFEDFA;
 }
@@ -39,7 +70,15 @@ h2, h4 {
     background-color: #FFEDFA; 
     border: 3px solid #EC7FA9; 
     color: #7D1C4A;
+    
     box-shadow: 0 8px 15px rgba(255, 136, 170, 0.3), 0 4px 6px rgba(255, 136, 170, 0.1);   
+
+    transition: all 0.3s ease; 
+}
+
+#hint-box:hover, #splash-info:hover {
+    transform: translateY(-3px) scale(1.02); 
+    box-shadow: 0 12px 20px rgba(255, 136, 170, 0.4), 0 6px 10px rgba(255, 136, 170, 0.1);
 }
 
 #mouse-coords {
@@ -53,8 +92,16 @@ h2, h4 {
     font-weight: bold;   
     color: #7D1C4A; 
     border: 2px solid #EC7FA9;
-    
     box-shadow: 0 2px 5px rgba(255, 136, 170, 0.3);
+    transition: all 0.3s ease;
+    cursor: default;
+}
+
+#mouse-coords:hover {
+    transform: translateY(-3px) scale(1.05); 
+    box-shadow: 0 6px 10px rgba(255, 136, 170, 0.4); 
+    background-color: #FFEDFA;
+    border-color: #FF90BB;
 }
 
 #control-button, #restart-button, .city-select-button, #home-button { 
@@ -65,20 +112,22 @@ h2, h4 {
     margin-top: 10px;
     border-radius: 8px; 
     transition: all 0.2s ease;
+    
     background-color: #FF90BB; 
     color: #FFEDFA; 
     border: 2px solid #EC7FA9;
+    
     box-shadow: 0 4px 6px rgba(255, 136, 170, 0.3), 0 1px 3px rgba(255, 136, 170, 0.1);
 }
 
 #control-button:hover, #restart-button:hover, #home-button:hover, .city-select-button:hover {
-    transform: translateY(-2px);
+    transform: translateY(-2px) scale(1.03);
     background-color: #EC7FA9; 
     box-shadow: 0 6px 10px rgba(255, 136, 170, 0.3), 0 2px 4px rgba(255, 136, 170, 0.1);
 }
 
 #control-button:active, #restart-button:active, #home-button:active, .city-select-button:active {
-    transform: translateY(1px);
+    transform: translateY(1px) scale(0.98);
     box-shadow: 0 2px 3px rgba(255, 136, 170, 0.3);
 }
 
@@ -103,8 +152,16 @@ h2, h4 {
     border: 2px solid #FF90BB; 
     border-radius: 50%;    
     display: flex; flex-direction: column; align-items: center; justify-content: center; 
-    pointer-events: none;
+
     box-shadow: 0 4px 8px rgba(255, 136, 170, 0.3);
+    transition: all 0.3s ease;
+}
+
+#north-arrow:hover {
+    transform: scale(1.1) rotate(360deg); 
+    box-shadow: 0 8px 15px rgba(255, 136, 170, 0.5);
+    background-color: #FFEDFA;
+    cursor: help; 
 }
 
 .arrow-n { 
@@ -118,7 +175,7 @@ h2, h4 {
     width: 2px; height: 14px; 
     background-color: #FF90BB; 
     border-radius: 1px; 
-    position: relative; margin-top: 4px; 
+    position: relative; margin-top: 4px;  
 }
 
 .arrow-shape::after {
@@ -126,7 +183,7 @@ h2, h4 {
     width: 0; height: 0; 
     border-left: 5px solid transparent; 
     border-right: 5px solid transparent; 
-    border-bottom: 12px solid #FF90BB;
+    border-bottom: 12px solid #FF90BB;    
 }
 
 #result-modal > div {
@@ -142,12 +199,19 @@ h2, h4 {
     box-shadow: 0 4px 0 #EC7FA9 !important;
 }
 
-.huechange { 
-    filter: hue-rotate(130deg) brightness(1.1) saturate(1.2); 
-}
-
 #game-over-msg {
     font-size: 1.4em; 
     font-weight: bold; 
     margin-top: 15px;
+}
+
+.huechange { 
+    filter: hue-rotate(130deg) brightness(1.1) saturate(1.2); 
+}
+
+#game-controls > p {
+    font-weight: 700; 
+    font-size: 1.3em; 
+    margin: 8px 0;    
+    color: #FF90BB;   
 }

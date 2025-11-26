@@ -8,6 +8,8 @@ const pinkIcon = L.icon({
     className: 'huechange' 
 });
 
+
+
 function getDirectionText(userLat, userLng, targetLat, targetLng, distance) {
     let direction = "";
     if (targetLng > userLng) direction += "East"; else direction += "West";
@@ -18,7 +20,7 @@ function getDirectionText(userLat, userLng, targetLat, targetLng, distance) {
 
 let score = 0;
 let maxPossibleScore = 0;
-let time = 120;
+let time = 105;
 let gameActive = false;
 let timerInterval;
 let currentArtifactIndex = 0;
@@ -26,7 +28,7 @@ let currentCity = 'ankara';
 let currentArtifacts = [];
 let myChart = null; 
 let responseTimes = []; 
-let lastTimeRemaining = 120; 
+let lastTimeRemaining = 105; 
 
 const scoreDisplay = document.getElementById('score');
 const timerDisplay = document.getElementById('timer');
@@ -45,32 +47,26 @@ const cityData = {
         center: [39.9334, 32.8597],
         zoom: 14, 
         distanceThreshold: 300, 
-        timeLimit: 120, 
+        timeLimit: 105, 
         artifacts: [
             { name: "Ankara Castle", clue: "The historical hilltop fortress in the center of old Ankara.", lat: 39.9405, lng: 32.8631 },
-            { name: "Anitkabir", clue: "The monumental mausoleum of Mustafa Kemal Ataturk. (BONUS POINTS!)", lat: 39.9250, lng: 32.8369 },
+            { name: "Anitkabir", clue: "The eternal resting place of the Father of Turks. Where the heart of the nation beats. (BONUS POINTS!)", lat: 39.9250, lng: 32.8369 },
             { name: "Atakule", clue: "The primary landmark tower located in Cankaya.", lat: 39.8859, lng: 32.8558 },
             { name: "Kugulu Park", clue: "A famous park with swans in the Kavaklidere district.", lat: 39.9022, lng: 32.8601 },
-            { name: "Hacettepe Beytepe", clue: "The large university campus located in the western hills.", lat: 39.8704, lng: 32.7358 },
-            { name: "Republic Museum", clue: "The 2nd Parliament Building, witnessing the early Republic years.", lat: 39.9411, lng: 32.8515 },
-            { name: "Eymir Lake", clue: "A natural lake south of the city, popular for biking.", lat: 39.8249, lng: 32.8328 },
-            { name: "Ataturk Forest Farm (AOÇ)", clue: "A large recreational farming area and zoo established by Ataturk.", lat: 39.9463, lng: 32.8047 }
+            { name: "Hacettepe Beytepe Campus", clue: "Very familiar university campus located in the western hills.", lat: 39.8704, lng: 32.7358 },
         ]
     },
     istanbul: {
         center: [41.0082, 28.9784],
         zoom: 14, 
         distanceThreshold: 300, 
-        timeLimit: 90, 
+        timeLimit: 85, 
         artifacts: [
-            { name: "Galata Tower", clue: "A medieval stone tower in the Galata/Karakoy quarter.", lat: 41.0255, lng: 28.9741 },
-            { name: "Basilica Cistern", clue: "The largest of several hundred ancient cisterns beneath the city.", lat: 41.0084, lng: 28.9779 },
-            { name: "Dolmabahce Palace", clue: "The main administrative center of the Ottoman Empire on the Bosphorus.", lat: 41.0391, lng: 29.0003 },
-            { name: "Maiden's Tower", clue: "A tower on a small islet at the southern entrance of the Bosphorus.", lat: 41.0211, lng: 29.0041 },
-            { name: "Tupras Stadium", clue: "A modern football stadium right next to Dolmabahce Palace.", lat: 41.0393, lng: 28.9944 },
-            { name: "Taksim Square", clue: "The heart of modern Istanbul, known for the Republic Monument.", lat: 41.0369, lng: 28.9853 },
-            { name: "Karakoy Pier", clue: "A busy ferry terminal near the Galata Bridge.", lat: 41.0225, lng: 28.9769 },
-            { name: "Pera Museum", clue: "A private museum in the Tepebasi quarter, formerly the Bristol Hotel.", lat: 41.0317, lng: 28.9754 }
+            { name: "Galata Tower", clue: "The medieval stone tower offering the best view of the Golden Horn, where Hezarfen took flight.", lat: 41.0255, lng: 28.9741 },
+            { name: "Dolmabahce Palace", clue: "The magnificent palace on the Bosphorus where the Father of Turks closed his eyes forever.", lat: 41.0391, lng: 29.0003 },
+            { name: "Maiden's Tower", clue: "The legendary tower floating on the Bosphorus, protecting a princess from a snake bite.", lat: 41.0211, lng: 29.0041 },
+            { name: "Tupras Stadium", clue: "🦅The loud and proud home of the Black Eagles.🦅 ", lat: 41.0393, lng: 28.9944 },
+            { name: "Taksim Square", clue: "The beating heart of modern Istanbul, where the Republic Monument stands tall.", lat: 41.0369, lng: 28.9853 },
         ]
     }
 };
@@ -89,7 +85,7 @@ function initializeMap() {
 
     homeButton.style.display = 'none';
     gameControls.style.display = 'none';
-    resetGame();
+    map.setView([39.0, 35.0], 6);
 }
 
 function restartGame() {
@@ -119,7 +115,20 @@ function resetGame() {
     timerDisplay.textContent = time;
     score = 0;
     scoreDisplay.textContent = score;
-    clueText.textContent = `Ready to explore ${currentCity.toUpperCase()}? Press START.`;
+
+    clueText.innerHTML = `
+        Ready to explore ${currentCity.toUpperCase()}? Press START.
+        <div style="font-size: 0.85em; color: #FF90BB; font-weight: bold; margin-top: 15px; line-height: 1.5; border-top: 2px dashed #FF90BB; padding-top: 10px;">
+
+            📍 GAMEPLAY RULES:<br>
+            
+            <span style="color: #A53860; font-weight: 450;"> Wrong clicks reduce time!</span><br>
+            
+            <span style="color: #A53860; font-weight: 450;"> Use bottom-left coords for distance.</span><br>
+            
+            <span style="color: #A53860; font-weight: 450;"> Zoom in for better accuracy!</span>
+        </div>
+    `;
     
     gameActive = false;
     controlButton.textContent = "START";
@@ -208,9 +217,8 @@ function goHome() {
     gameControls.style.display = 'none';
     splashScreen.style.display = 'block';
     homeButton.style.display = 'none';
-    map.setView([39.9334, 32.8597], 6); 
-    clearMapLayers();
     gameActive = false;
+    map.setView([39.0, 35.0], 6);
     currentArtifactIndex = 0;
     controlButton.textContent = "START";
 }
