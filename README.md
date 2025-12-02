@@ -46,6 +46,8 @@ The project features custom **"Pink"** theme:
     * ✅ **Correct:** You earn points and move to the next clue.
     * ❌ **Incorrect:** You lose 2 seconds and receive a directional hint.
 4.  **Review:** When the game ends, check your performance graph in the result window that shows the time that you spend to find the locations.
+   <img width="1830" height="867" alt="image" src="https://github.com/user-attachments/assets/93ada0da-8733-4984-b9d1-693ab2b2c14f" />
+
 
 ---
 
